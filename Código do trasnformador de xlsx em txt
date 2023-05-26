@@ -1,0 +1,48 @@
+import pandas as pd
+import openpyxl as py
+import shutil
+import os
+
+#Caminho
+caminho = 'C:/Users/Eduardo/Desktop/LabC'
+arq=[]
+for raiz, diretorios, arquivos in os.walk(caminho):
+  for arquivo in arquivos:
+    arq.append(arquivo)
+    print(arq)
+#Entrada de arquivos
+nomearq = input('Nome do arquivo(Igual ao original, excel o formato(.xlsx)):')
+print('O caminho vai ser o LabC beleza(Então cria uma pasta chamada Lab C e coloca no Desktop), coloque o arquivo lá por favor\n\n')
+#Nome do arquivo em formato xlsx
+nomenovo = nomearq +'.xlsx'
+caminhoexcel = caminho + '/' + nomenovo
+print(caminhoexcel)
+print(nomenovo)
+pasta=None
+
+
+try:  
+  pasta = pd.read_excel(r'C:/Users/Eduardo/Desktop/LabC'+ '/' + nomenovo, engine='openpyxl')
+except FileNotFoundError :
+   print('Erro encontrado')
+while pasta is None:
+     nomearq = input('Nome do arquivo(Igual ao original, excel o formato(.xlsx)):')
+     if nomearq  not in arq:
+       print('Tente novamente\n\n')
+       print(arq)
+       continue
+     else:
+        nomenovo = nomearq +'.xlsx'
+        pasta = pd.read_excel(nomenovo)
+#Mudando o arquivo para csv
+aqrCSV = nomenovo.replace('.xlsx', '.csv')
+
+#Transformando em CSV
+csv1 = pasta.to_csv('ARQCSV.csv', index=None, header=True, columns = None)
+print(csv1)
+#Nome do txt
+TXTNome = input('Qual o nome que quer usar no txt(Somente o nome, por favor):')
+#Convertendo de CSV em TXT
+src ='ARQCSV.csv'
+dest=TXTNome +'.txt'
+shutil.copyfile(src,dest)
